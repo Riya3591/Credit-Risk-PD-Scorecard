@@ -28,14 +28,14 @@ probability_of_default = 1 / (1 + np.exp(-log_odds))
 
 # --- IFRS 9 STAGING LOGIC ---
 if probability_of_default > 0.60 or employment == "Unemployed":
-stage = "Stage 3: Default / Impaired Assets"
-color = "🔴"
+  stage = "Stage 3: Default / Impaired Assets"
+  color = "🔴"
 elif probability_of_default > 0.15 or cleaned_util > 0.85:
-stage = "Stage 2: Significant Increase in Credit Risk (SICR)"
-color = "🟡"
+  stage = "Stage 2: Significant Increase in Credit Risk (SICR)"
+  color = "🟡"
 else:
-stage = "Stage 1: Healthy Portfolio Asset"
-color = "🟢"
+  stage = "Stage 1: Healthy Portfolio Asset"
+  color = "🟢"
 
 # --- RENDER RESULTS DISPLAY ---
 col1, col2 = st.columns(2)
