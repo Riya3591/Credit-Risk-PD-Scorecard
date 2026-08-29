@@ -17,8 +17,8 @@ with st.sidebar.form(key="risk_assessment_form"):
     region = st.selectbox("Geographical Region", ["Region A", "Region B", "Region C", "Unknown"])
     employment = st.selectbox("Employment Designation", ["Salaried", "Self-Employed", "Unemployed", "NA"])
     
-    # 🔘 THE NEW ENTERPRISE SUBMIT BUTTON
-    submit_button = st.form_submit_form_button(label="🚀 Calculate Credit Risk Staging")
+# 🔘 THE NEW ENTERPRISE SUBMIT BUTTON
+submit_button = st.form_submit_form_button(label="🚀 Calculate Credit Risk Staging")
 
 # --- EXECUTE MATHEMATICAL ENGINE ON SUBMIT ---
 if submit_button:
