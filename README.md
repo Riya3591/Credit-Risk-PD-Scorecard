@@ -32,7 +32,7 @@ The predictive model assesses credit risk using multi-dimCredit Utilization Rate
 ## 🚀 TechLanguage:ments & Toolkit
 
 * **Language:** SAS (SAS Studio Statistical Techniques:s)
-* **Statistical Techniques:** Logistic Regression, Binary Classification, Missing Value ImputValidation Metrics:ation.
+* **Statistical Techniques:** Logistic Regression, Binary Classification, Missing Value Imputation.
 * **Validation Metrics:** ROC-AUC Curve, KS Statistic, Metadata Structure Auditing (PROC CONTENTS).
 
 ---
