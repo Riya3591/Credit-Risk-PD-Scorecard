@@ -13,10 +13,10 @@ The development is modularized across eight sequential SAS scripts:
 
 1. **1_1_LoadData.sas (Data Ingestion & Cleaning):** Ingests raw historical portfolio metrics (.csv), executes initial data cleansing rules (removing chronologically impossible loan records), caps outliers, and normalizes null values.
 2. **1_2_DQ.sas (Data Quality Analysis):** Conducts thorough data diagnostics, auditing missing percentages and verifying statistical distributions.
-3. **1_3_DataSplit.sas (Partitioning):** Segregates clean data intoTraining (70%)ning Testing (30%)ting (30%)** sets to prevent model overfitting.
+3. **1_3_DataSplit.sas (Partitioning):** Segregates clean data intoTraining (70%) Testing (30%)** sets to prevent model overfitting.
 4. **1_4_FeatureEng.sas (Feature Engineering):** Generates optimized predictive indicators, handles variable binning, and structures borrower risk profiles.
-5. **1_5_Logistic.sas (Model Estimation):** Logistic Regressionogistic Regression** classifier to assign Point-in-Time (PIT) Probability of Default (PD) ratings.
-6. **1_6_KS&AUC.sas (Model Validation):** Evaluates the model's discriminatory power on oKolmogorov-Smirnov (KS)olmogArea Under the ROC Curve (AUC)er the ROC Curve (AUC)** metrics.
+5. **1_5_Logistic.sas (Model Estimation):** Logistic  Regression** classifier to assign Point-in-Time (PIT) Probability of Default (PD) ratings.
+6. **1_6_KS&AUC.sas (Model Validation):** Evaluates the model's discriminatory power on oKolmogorov-Smirnov Area Under the ROC Curve (AUC)er the ROC Curve (AUC)** metrics.
 7. **1_7_Calibration.sas (Risk Calibration & Macro Overlay):** Calibrates statistical risk scores against historical central tendencies and overlays macroeconomic scenarios (e.g., base, optimistic, adverse) to adjust for forward-looking economic shifts.
 8. **1_8_ECL.sas (Expected Credit Loss Engine):** Integrates PD outputs with Exposure at Default (EAD) and Loss Given Default (LGD) metrics to compute final financial provisions under the strict IFRS 9 impairment guidelines.
 
