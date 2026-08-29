@@ -40,9 +40,9 @@ else:
 # --- RENDER RESULTS DISPLAY ---
 col1, col2 = st.columns(2)
 with col1:
-st.metric(label="Estimated Probability of Default (PD)", value=f"{probability_of_default:.2%}")
+  st.metric(label="Estimated Probability of Default (PD)", value=f"{probability_of_default:.2%}")
 with col2:
-st.markdown(f"Asset Allocation Status: \n ### {color} {stage}")
+  st.markdown(f"Asset Allocation Status: \n ### {color} {stage}")
 
 st.markdown("---")
 st.info("💡 Technical Note: This web deployment pipeline mirrors the numerical optimization coefficients derived from the baseline SAS macro framework."
