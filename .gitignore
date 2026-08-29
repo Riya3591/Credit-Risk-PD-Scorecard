@@ -1,0 +1,4 @@
+# Ignore local raw data assets
+*.csv
+*.xlsx
+.sas7bdat
