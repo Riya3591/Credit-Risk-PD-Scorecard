@@ -1,60 +1,97 @@
 import streamlit as st
+import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc
 
-# --- PAGE SETUP ---
-st.set_page_config(page_title="IFRS 9 Credit Risk Simulator", page_icon="💳", layout="centered")
-st.title("💳 Institutional Credit Risk & ECL Simulator")
+# App Titles & Configuration
+st.set_page_config(layout="wide")
+st.title("🏛️ Institutional Credit Risk & ECL Simulator")
 st.subheader("Interactive IFRS 9 Baseline Parameter Evaluator")
-st.markdown("---")
 
-# --- USER PROFILE INPUTS ---
-st.sidebar.header("🔍 Borrower Assessment Metrics")
+# --- SIDEBAR CONTROLS ---
+st.sidebar.header("Model Parameters")
+pd_threshold = st.sidebar.slider("Probability of Default (PD) Cutoff", 0.0, 1.0, 0.5)
 
-# Wrapping inputs inside a clean, structured web form
-with st.sidebar.form(key="risk_assessment_form"):
-    credit_util = st.slider("Revolving Credit Utilization Rate", 0.0, 1.5, 0.35, step=0.01)
-    loan_age = st.slider("Account Maturity (Loan Age in Months)", 1, 120, 24)
-    region = st.selectbox("Geographical Region", ["Region A", "Region B", "Region C", "Unknown"])
-    employment = st.selectbox("Employment Designation", ["Salaried", "Self-Employed", "Unemployed", "NA"])
-    
-# 🔘 THE NEW ENTERPRISE SUBMIT BUTTON
-submit_button = st.form_submit_form_button(label="🚀 Calculate Credit Risk Staging")
+# --- FORM DECLARATION ---
+with st.form("credit_risk_form"):
+st.write("### Configure Evaluation Inputs")
+# Add input elements here (e.g., file uploaders or metric fields)
 
-# --- EXECUTE MATHEMATICAL ENGINE ON SUBMIT ---
+# FIX APPLIED HERE:
+submit_button = st.form_submit_button(label="Calculate Credit Risk")
+
+# --- PROCESS OUTPUTS ON SUBMIT ---
 if submit_button:
-    # --- DATA CLEANING SIMULATION ---
-    cleaned_util = max(0.0, min(credit_util, 1.0))
+st.success("Analysis Complete!")
 
-    # --- MATH BACKEND SIMULATION ---
-    intercept = -1.5
-    w_util = 3.2
-    w_age = -0.02
+# Create layout tabs for clean scanning
+tab1, tab2, tab3 = st.tabs(["📊 KS & AUC Performance", "🎯 Calibration", "💰 ECL Calculations"])
 
-    log_odds = intercept + (w_util * cleaned_util) + (w_age * loan_age)
-    probability_of_default = 1 / (1 + np.exp(-log_odds))
+with tab1:
+st.header("Kolmogorov-Smirnov (KS) & AUC Performance")
 
-    # --- IFRS 9 STAGING LOGIC ---
-    if probability_of_default > 0.60 or employment == "Unemployed":
-        stage = "Stage 3: Default / Impaired Assets"
-        color = "🔴"
-    elif probability_of_default > 0.15 or cleaned_util > 0.85:
-        stage = "Stage 2: Significant Increase in Credit Risk (SICR)"
-        color = "🟡"
-    else:
-        stage = "Stage 1: Healthy Portfolio Asset"
-        color = "🟢"
+# Mock/Calculated evaluation Data for visualization
+# Replace this block with your validated data arrays from model evaluation
+np.random.seed(42)
+y_true = np.random.randint(0, 2, 1000)
+y_scores = np.random.rand(1000) * 0.4 + y_true * 0.4
 
-    # --- RENDER RESULTS DISPLAY ---
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric(label="Estimated Probability of Default (PD)", value=f"{probability_of_default:.2%}")
-    with col2:
-        st.markdown(f"Asset Allocation Status: \n ### {color} {stage}")
-else:
-    # Default instruction view before clicking submit
-    st.warning("👈 Please adjust the borrower metrics in the sidebar and click 'Calculate Credit Risk Staging' to view the live dashboard output metrics.")
+fpr, tpr, thresholds = roc_curve(y_true, y_scores)
+roc_auc = auc(fpr, tpr)
 
-st.markdown("---")
-st.info("💡 Technical Note: This web deployment pipeline mirrors the numerical optimization coefficients derived from the baseline SAS macro framework.")
+# Calculate KS Statistic
+df_ks = pd.DataFrame({'real': y_true, 'prob': y_scores})
+df_ks['bucket'] = pd.qcut(df_ks['prob'], 10, duplicates='drop')
+# ... (Insert actual KS calculation Logic logic here) ...
+ks_stat = 0.45 # Example placeholder metric
 
+# Columns for metrics
+col1, col2 = st.columns(2)
+col1.metric("AUC Score", f"{roc_auc:.4f}")
+col2.metric("KS Statistic", f"{ks_stat:.4f}")
 
+# Plotting AUC & KS Curves
+fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+
+# ROC Curve Plot
+ax[0].plot(fpr, tpr, label=f'ROC curve (area = {roc_auc:.2f})', color='darkorange', lw=2)
+ax[0].plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+ax[0].set_title('Receiver Operating Characteristic (ROC)')
+ax[0].set_xlabel('False Positive Rate')
+ax[0].set_ylabel('True Positive Rate')
+ax[0].legend(loc="lower right")
+
+# Placeholder for KS chart logic
+ax[1].plot(thresholds, tpr, label='True Positive Rate (Bad Capturing)')
+ax[1].plot(thresholds, fpr, label='False Positive Rate (Good Over-killing)')
+ax[1].set_title('KS Curve Analysis')
+ax[1].set_xlabel('Threshold')
+ax[1].set_ylabel('Cumulative Percentage')
+ax[1].legend()
+
+st.pyplot(fig)
+
+with tab2:
+st.header("Model Calibration Overview")
+st.info("Displays visual alignment of Predicted vs Actual Probability of Default (PD) bands.")
+# Render validation matrices or plots from your 1_7_Calibration step here
+
+with tab3:
+st.header("Expected Credit Loss (ECL) Calculation Matrix")
+st.write("Final calculated outputs based on: $ECL = PD \\times LGD \\times EAD$")
+
+# Displaying data calculation results table
+mock_ecl_summary = pd.DataFrame({
+'Asset Class': ['Corporate', 'Retail', 'SME'],
+'Exposure at Default (EAD)':,
+'Probability of Default (PD)': [0.023, 0.045, 0.031],
+'Loss Given Default (LGD)': [0.45, 0.60, 0.50],
+'Calculated Final ECL': [103500, 67500, 69750]
+})
+st.dataframe(mock_ecl_summary.style.format({
+'Exposure at Default (EAD)': '${:,.2f}',
+'Probability of Default (PD)': '{:.2%}',
+'Loss Given Default (LGD)': '{:.2%}',
+'Calculated Final ECL': '${:,.2f}'
+}))
