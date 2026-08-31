@@ -84,7 +84,7 @@ if submit_button:
         total_non_defaults = len(df_sorted) - total_defaults
         
         # Build evaluation metrics safely via cumulative coordinate arrays
-cum_defaults = df_sorted['Actual_Default'].cumsum().values
+        cum_defaults = df_sorted['Actual_Default'].cumsum().values
         cum_non_defaults = (1 - df_sorted['Actual_Default']).cumsum().values
         
         tpr = cum_defaults / total_defaults if total_defaults > 0 else np.zeros_like(cum_defaults)
