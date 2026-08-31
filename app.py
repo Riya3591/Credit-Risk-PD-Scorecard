@@ -17,7 +17,7 @@ pd_threshold = st.sidebar.slider("Probability of Default (PD) Cutoff", 0.0, 1.0,
 with st.form("credit_risk_form"):
     st.write("### Configure Evaluation Inputs")
     
-    # Correct Streamlit button method
+    # Correct Streamlit form method
     submit_button = st.form_submit_button(label="Calculate Credit Risk")
 
 # --- PROCESS OUTPUTS ON SUBMIT ---
@@ -49,7 +49,7 @@ if submit_button:
         # Plotting AUC & KS Curves
         fig, ax = plt.subplots(1, 2, figsize=(12, 5))
         
-        # Fixed lines
+        # ROC baseline line
         ax.plot(fpr, tpr, label=f'ROC curve (area = {roc_auc:.2f})', color='darkorange', lw=2)
         ax.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
         ax.set_title('Receiver Operating Characteristic (ROC)')
@@ -75,13 +75,13 @@ if submit_button:
         st.header("Expected Credit Loss (ECL) Calculation Matrix")
         st.write("Final calculated outputs based on: $ECL = PD \\times LGD \\times EAD$")
         
-        # FIXED: Regular numeric data with no empty placeholders
+        # FIXED: Numbers explicitly filled in with no missing brackets
         mock_ecl_summary = pd.DataFrame({
             'Asset Class': ['Corporate', 'Retail', 'SME'],
-            'Exposure at Default (EAD)':,
+            'Exposure at Default (EAD)': [1000000, 500000, 250000],
             'Probability of Default (PD)': [0.023, 0.045, 0.031],
             'Loss Given Default (LGD)': [0.45, 0.60, 0.50],
-            'Calculated Final ECL': [10350, 6750, 7750]
+            'Calculated Final ECL': [10350, 13500, 3875]
         })
         
         st.dataframe(mock_ecl_summary.style.format({
@@ -90,5 +90,3 @@ if submit_button:
             'Loss Given Default (LGD)': '{:.2%}',
             'Calculated Final ECL': '${:,.2f}'
         }))
-
-
